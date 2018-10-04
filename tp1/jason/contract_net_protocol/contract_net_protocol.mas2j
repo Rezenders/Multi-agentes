@@ -15,6 +15,6 @@ MAS contract_net_protocol {
     infrastructure: Centralised
 
     agents:
-      initiator;
-      participant;
+      initiator #1;
+      participant #20;
 }
