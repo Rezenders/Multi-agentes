@@ -17,7 +17,6 @@ import jade.proto.ContractNetInitiator;
 
 public class initiatorAgent extends Agent {
 	
-	Map<String,Vector<Vector<String>>> proposals = new HashMap<String,Vector<Vector<String>>>();
 	Vector<String> services = new Vector<String>();
 	
 	protected void setup(){
@@ -52,31 +51,6 @@ public class initiatorAgent extends Agent {
       		addBehaviour(new ContractNetInitiator(this, msg) {
       			
       			protected void handlePropose(ACLMessage propose, Vector v) {
-      				
-      				Vector<String> content = new Vector<String>();
-      				try {
-						content = (Vector<String>) propose.getContentObject();
-						String key = content.get(0);
-						
-						Vector<String> values = new Vector<String>();
-						values.add(content.get(1));				
-						values.add(String.valueOf(propose.getSender().getLocalName()));
-												
-						Vector<Vector<String>> aux = new Vector<Vector<String>>();
-						if(proposals.get(key)==null) {
-							aux.add(values);
-						}else {
-							aux = proposals.get(key);
-							aux.add(values);
-						}
-											
-						proposals.put(key, aux);						
-						
-					} catch (UnreadableException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-      				
 //					System.out.println("Agent "+propose.getSender().getLocalName()+" proposed "+content.get(0) + " for " + content.get(1));
 				}
       			
@@ -132,21 +106,6 @@ public class initiatorAgent extends Agent {
         
     }
 	
-	class contract_net_protocol extends SimpleBehaviour{
-
-		@Override
-		public void action() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public boolean done() {
-			// TODO Auto-generated method stub
-			return true;
-		}
-
-	}
 }
 
 

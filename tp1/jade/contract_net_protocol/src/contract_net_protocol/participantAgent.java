@@ -23,6 +23,7 @@ public class participantAgent extends Agent{
 	
 	public void setup() {
 		items.put("book", 3);
+		items.put("bike", 3);
 		
 		System.out.println("Agent "+getLocalName()+" waiting for CFP...");
 		
