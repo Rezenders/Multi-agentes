@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
@@ -21,6 +22,8 @@ public class initiatorAgent extends Agent {
 	
 	protected void setup(){
 		services.add("book");
+		services.add("bike");
+		
         System.out.println("Starting initiator agent called " + getLocalName());
         
         Object[] args = getArguments();
@@ -28,19 +31,23 @@ public class initiatorAgent extends Agent {
       		int nResponders = args.length;
       		System.out.println("Initiator "+ getLocalName() +" establishing contract net protocol with " +nResponders + " participants");
       		
-      		// Fill the CFP message
-      		ACLMessage msg = new ACLMessage(ACLMessage.CFP);
-      		for (int i = 0; i < args.length; ++i) {
-      			msg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
-      		}
+      		Iterator it = services.iterator();
+      		while(it.hasNext()) {
+	      		String service = (String) it.next();
+      			// Fill the CFP message
+	      		ACLMessage msg = new ACLMessage(ACLMessage.CFP);
+	      		for (int i = 0; i < args.length; ++i) {
+	      			msg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
+	      		}
+	      		
+	      		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
+	      		msg.setReplyByDate(new Date(System.currentTimeMillis() + 2000));
+	      		
+	      		Vector<String> cnp = new Vector<String>();
+	      		msg.setContent(service);
+	      		
+	      		System.out.println("[" + getLocalName()+"] Requesting "+msg.getContent());
       		
-      		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-      		msg.setReplyByDate(new Date(System.currentTimeMillis() + 2000));
-      		
-      		Vector<String> cnp = new Vector<String>();
-      		msg.setContent(services.get(0));
-      		
-      		System.out.println("[" + getLocalName()+"] Requesting "+msg.getContent());
       		
       		addBehaviour(new ContractNetInitiator(this, msg) {
       			
@@ -117,12 +124,30 @@ public class initiatorAgent extends Agent {
 
 				
       		});
+      		}
       		
       	}
         
     }
 	
-	
+	class contract_net_protocol extends SimpleBehaviour{
+
+		@Override
+		public void action() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public boolean done() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+	}
 }
+
+
+
 
 

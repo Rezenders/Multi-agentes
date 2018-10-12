@@ -36,7 +36,8 @@ public class participantAgent extends Agent{
 			protected ACLMessage handleCfp(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
 				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getLocalName()+". Service is "+cfp.getContent());
 				
-				if(items.get(cfp.getContent())>0) {
+				
+				if(items.get(cfp.getContent())!=null && items.get(cfp.getContent())>0) {
 					
 					
 					Vector<String> content = new Vector<String>();
@@ -65,8 +66,7 @@ public class participantAgent extends Agent{
 			protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
 				System.out.println("Agent "+getLocalName()+": Proposal accepted");
 				
-				String item_name = cfp.getContent();
-				int item_qt = items.get(item_name);
+				
 				
 				Vector<String> content = new Vector<String>();
   				try {
@@ -77,6 +77,9 @@ public class participantAgent extends Agent{
 					e.printStackTrace();
 				}
 				double price = Double.valueOf(content.get(1));
+				String item_name = content.get(0);
+				int item_qt = items.get(item_name);
+				
 				if (item_qt > 0) {
 					items.put(item_name, item_qt -1);
 					System.out.println("[ "+getLocalName() +" ] When negotiating with "+cfp.getSender().getLocalName()+" I sold "+ item_name+ " for "+price);
