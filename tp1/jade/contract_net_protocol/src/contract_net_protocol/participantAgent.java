@@ -34,7 +34,7 @@ public class participantAgent extends Agent{
 			
 			@Override
 			protected ACLMessage handleCfp(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
-				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getLocalName()+". Service is "+cfp.getContent());
+//				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getLocalName()+". Service is "+cfp.getContent());
 				
 				
 				if(items.get(cfp.getContent())!=null && items.get(cfp.getContent())>0) {
@@ -56,7 +56,7 @@ public class participantAgent extends Agent{
 					
 					return propose;					
 				}else {
-					System.out.println("Agent "+getLocalName()+": Refuse");
+					System.out.println("["+getLocalName()+"] Refused request for " + cfp.getContent());
 					throw new RefuseException("evaluation-failed");					
 				}	
 				
@@ -64,10 +64,7 @@ public class participantAgent extends Agent{
 			
 			@Override
 			protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
-				System.out.println("Agent "+getLocalName()+": Proposal accepted");
-				
-				
-				
+								
 				Vector<String> content = new Vector<String>();
   				try {
 					content = (Vector<String>) propose.getContentObject();
@@ -82,7 +79,7 @@ public class participantAgent extends Agent{
 				
 				if (item_qt > 0) {
 					items.put(item_name, item_qt -1);
-					System.out.println("[ "+getLocalName() +" ] When negotiating with "+cfp.getSender().getLocalName()+" I sold "+ item_name+ " for "+price);
+					System.out.println("["+getLocalName() +"] When negotiating with "+cfp.getSender().getLocalName()+" I sold "+ item_name+ " for "+price);
 					ACLMessage inform = accept.createReply();
 					inform.setPerformative(ACLMessage.INFORM);
 					return inform;

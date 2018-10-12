@@ -29,7 +29,7 @@ public class initiatorAgent extends Agent {
         Object[] args = getArguments();
       	if (args != null && args.length > 0) {
       		int nResponders = args.length;
-      		System.out.println("Initiator "+ getLocalName() +" establishing contract net protocol with " +nResponders + " participants");
+//      		System.out.println("Initiator "+ getLocalName() +" establishing contract net protocol with " +nResponders + " participants");
       		
       		Iterator it = services.iterator();
       		while(it.hasNext()) {
@@ -77,11 +77,11 @@ public class initiatorAgent extends Agent {
 						e.printStackTrace();
 					}
       				
-					System.out.println("Agent "+propose.getSender().getName()+" proposed "+content.get(0) + " for " + content.get(1));
+//					System.out.println("Agent "+propose.getSender().getLocalName()+" proposed "+content.get(0) + " for " + content.get(1));
 				}
       			
       			protected void handleRefuse(ACLMessage refuse) {
-					System.out.println("Agent "+refuse.getSender().getName()+" refused");
+//					System.out.println("Agent "+refuse.getSender().getName()+" refused");
 				}
       			
       			protected void handleAllResponses(Vector responses, Vector acceptances) {
@@ -91,6 +91,7 @@ public class initiatorAgent extends Agent {
 					ACLMessage accept = null;
 					
 					Enumeration e = responses.elements();
+					String item_name = "";
 					while (e.hasMoreElements()) {
 						ACLMessage msg = (ACLMessage) e.nextElement();
 						if (msg.getPerformative() == ACLMessage.PROPOSE) {
@@ -101,6 +102,7 @@ public class initiatorAgent extends Agent {
 							Vector<String> content = new Vector<String>();
 							try {
 								content = (Vector<String>) msg.getContentObject();
+								item_name = content.get(0);
 							} catch (UnreadableException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -116,7 +118,7 @@ public class initiatorAgent extends Agent {
 					}
 					// Accept the proposal of the best proposer
 					if (accept != null) {
-						System.out.println("Accepting proposal "+bestProposal+" from responder "+bestProposer.getLocalName());
+						System.out.println("["+getLocalName()+"] Accepting proposal of "+item_name+" for " +bestProposal+" from responder "+bestProposer.getLocalName());
 						accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 					}
 
