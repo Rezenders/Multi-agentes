@@ -78,39 +78,40 @@ public class initiatorAgent extends Agent {
 				}
       			
       			protected void handleAllResponses(Vector responses, Vector acceptances) {
+      				// Evaluate proposals.
+					double bestProposal = 100001;
+					AID bestProposer = null;
+					ACLMessage accept = null;
 					
-      				Iterator it = services.iterator();
-      				while(it.hasNext()) {
-      					Vector<Vector<String>> service_proposals = new Vector<Vector<String>>();
-      					service_proposals = proposals.get(it.next()); //PROVAVELMENTE VAI PRECISAR DE UM if!=null dps
-      					
-      					Iterator it2 = service_proposals.iterator();
-      					double best_proposal = 100001;
-      					String best_proposer = "";
-      					Vector<String> refused_proposers = new Vector<String>();
-      					while(it2.hasNext()) {
-      						Vector<String> proposal = new Vector<String>();
-      						proposal = (Vector<String>) it2.next();
-      						if(Double.valueOf(proposal.get(0)) < best_proposal) {
-      							best_proposal = Double.valueOf(proposal.get(0));
-      							best_proposer = proposal.get(1);
-      						}else {
-      							refused_proposers.add(proposal.get(1));
-      						}
-      						
-      					}
-      					System.out.println(best_proposal);
-      					System.out.println(best_proposer);
-      					
-      					ACLMessage msg = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-      					msg.addReceiver(new AID((String) best_proposer, AID.ISLOCALNAME));
-      					msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-      					msg.setReplyByDate(new Date(System.currentTimeMillis() + 2000));
-      					msg.setContent("oi");
-      					send(msg);
-      					
-      					
-      				}
+					Enumeration e = responses.elements();
+					while (e.hasMoreElements()) {
+						ACLMessage msg = (ACLMessage) e.nextElement();
+						if (msg.getPerformative() == ACLMessage.PROPOSE) {
+							ACLMessage reply = msg.createReply();
+							reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+							acceptances.addElement(reply);
+							
+							Vector<String> content = new Vector<String>();
+							try {
+								content = (Vector<String>) msg.getContentObject();
+							} catch (UnreadableException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+					
+							double proposal = Double.valueOf(content.get(1));
+							if (proposal < bestProposal) {
+								bestProposal = proposal;
+								bestProposer = msg.getSender();
+								accept = reply;
+							}
+						}
+					}
+					// Accept the proposal of the best proposer
+					if (accept != null) {
+						System.out.println("Accepting proposal "+bestProposal+" from responder "+bestProposer.getLocalName());
+						accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+					}
 
 				}
 

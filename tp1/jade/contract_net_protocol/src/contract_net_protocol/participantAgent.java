@@ -8,6 +8,7 @@ import java.util.HashMap;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
 
 import jade.domain.FIPANames;
@@ -33,7 +34,7 @@ public class participantAgent extends Agent{
 			
 			@Override
 			protected ACLMessage handleCfp(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
-				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Service is "+cfp.getContent());
+				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getLocalName()+". Service is "+cfp.getContent());
 				
 				if(items.get(cfp.getContent())>0) {
 					
@@ -63,8 +64,22 @@ public class participantAgent extends Agent{
 			@Override
 			protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
 				System.out.println("Agent "+getLocalName()+": Proposal accepted");
-				if (1==0) {
-					System.out.println("Agent "+getLocalName()+": Action successfully performed");
+				
+				String item_name = cfp.getContent();
+				int item_qt = items.get(item_name);
+				
+				Vector<String> content = new Vector<String>();
+  				try {
+					content = (Vector<String>) propose.getContentObject();
+										
+				} catch (UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				double price = Double.valueOf(content.get(1));
+				if (item_qt > 0) {
+					items.put(item_name, item_qt -1);
+					System.out.println("[ "+getLocalName() +" ] When negotiating with "+cfp.getSender().getLocalName()+" I sold "+ item_name+ " for "+price);
 					ACLMessage inform = accept.createReply();
 					inform.setPerformative(ACLMessage.INFORM);
 					return inform;
