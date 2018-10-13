@@ -1,7 +1,7 @@
 angent_type(participant).
 
 //Items avaiable
-item(book, 10).
+// item(book, 10).
 
 +!kqml_received(Sender, cfp, Content, MsgId) : .nth(1, Content, Item) & item(Item, Qt) & Qt > 0
     <-  .random(R);
@@ -20,7 +20,7 @@ item(book, 10).
         .print("When negotiating with ",Sender, " I won cnp with id ", Content, " sold ", Item, " for ", Price).
 
 +!kqml_received(Sender, accepted_proposal, Content, MsgId)
-    <-
+    <-  ?propose(Sender, Content, Item, Price);
         .print("When negotiating with ",Sender, " I won cnp with id ", Content, " but I no longer have ", Item, " in stock!").
 
 +!kqml_received(Sender, refused_proposal, Content, MsgId)

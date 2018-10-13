@@ -16,5 +16,5 @@ MAS contract_net_protocol {
 
     agents:
       initiator #2;
-      participant_book #2;
+      participant #2;
 }
