@@ -5,6 +5,7 @@ import java.util.Vector;
 import java.util.Map;
 import java.util.HashMap;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -22,9 +23,12 @@ public class participantAgent extends Agent{
 	
 	
 	public void setup() {
-		items.put("book", 3);
-		items.put("bike", 3);
-		
+		Object[] args = getArguments();
+      	if (args != null && args.length > 0) {
+      		for (int i = 0; i < args.length; ++i) {
+      			items.put((String) args[i], 50);
+      		}
+      		
 		System.out.println("Agent "+getLocalName()+" waiting for CFP...");
 		
 		MessageTemplate msg = MessageTemplate.and(
@@ -93,6 +97,7 @@ public class participantAgent extends Agent{
 			
 		});
 		
+	}
 	}
 
 }

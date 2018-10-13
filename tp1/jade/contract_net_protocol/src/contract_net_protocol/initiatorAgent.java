@@ -22,6 +22,9 @@ public class initiatorAgent extends Agent {
 	protected void setup(){
 		services.add("book");
 		services.add("bike");
+		services.add("car");
+		services.add("paper");
+		services.add("mustard");
 		
         System.out.println("Starting initiator agent called " + getLocalName());
         
