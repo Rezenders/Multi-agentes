@@ -7,8 +7,8 @@
 /* Plans */
 
 +!conduct_auction(Item, Price)
-	<- 	.print("Auctioning ",Item," for ", Price, " moneys")
-		.broadcast(achieve, japanese_auction(Item, Price))
+	<- 	.print("Auctioning ",Item," for ", Price, " moneys");
+		.broadcast(achieve, japanese_auction(Item, Price));
 		.wait(2000);
 		!check_participants(Item, P);
 		!detect_winner(Item, Price, P).
