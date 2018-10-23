@@ -1,0 +1,26 @@
+/*
+    japanese_auction_env
+    ---------------------------
+
+    JaCaMo Project File
+
+    This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
+
+    (see jacamo/doc/jcm.html for more information about what can be defined in this file)
+
+    JaCaMo 0.7-SNAPSHOT
+    October 23, 2018 - 13:23:44
+*/
+
+mas jauction_env {
+
+    agent auctionner : auctionner.asl
+
+    agent buyer1 : participant.asl
+    agent buyer2 : participant.asl 
+
+    workspace auction_room {
+        agents: auctionner, buyer1, buyer2
+    }
+
+}
