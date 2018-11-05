@@ -12,7 +12,7 @@
     October 23, 2018 - 13:23:44
 */
 
-mas jauction_env {
+mas jauction_org {
 
     agent auctionner : auctionner.asl
 
@@ -20,8 +20,14 @@ mas jauction_env {
     agent buyer2 : participant.asl
     agent buyer3 : participant.asl
 
-    workspace auction_room {
-        agents: auctionner, buyer1, buyer2, buyer3
+    organisation aorg : jauction-os.xml {
+        group agrp : jauctionGroup {
+            players: auctionner      auctioneer
+                     buyer1    participant
+                     buyer2    participant
+                     buyer3    participant
+            debug
+        }
     }
 
 }
